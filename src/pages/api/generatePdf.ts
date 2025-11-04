@@ -1,16 +1,29 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+    // Detect local vs Vercel environment
     const isLocal = !process.env.AWS_REGION;
+
+    // Detect local Chrome path dynamically for Windows, macOS, Linux
+    const localChromePath =
+      process.platform === "win32"
+        ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        : process.platform === "darwin"
+        ? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        : "/usr/bin/google-chrome";
+
+    const executablePath = isLocal
+      ? localChromePath
+      : await chromium.executablePath();
 
     const browser = await puppeteer.launch({
       args: chromium.args,
-      executablePath: isLocal
-        ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // Adjust for your system
-        : await chromium.executablePath(),
-      headless: true,
+      executablePath,
+      headless: chromium.headless,
+      defaultViewport: chromium.defaultViewport,
     });
 
     const page = await browser.newPage();
@@ -25,6 +38,7 @@ export default async function handler(req, res) {
             font-family: 'Noto Naskh Arabic', 'Arial', sans-serif;
             padding: 40px;
             line-height: 1.8;
+            background: #fdfdfd;
           }
           h1, h2, h3 {
             text-align: center;
@@ -32,6 +46,7 @@ export default async function handler(req, res) {
           }
           h1 {
             font-size: 24px;
+            color: #222;
           }
           h2 {
             font-size: 20px;
@@ -67,139 +82,62 @@ export default async function handler(req, res) {
           .page-break {
             page-break-after: always;
           }
+          .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            margin-top: 40px;
+          }
         </style>
       </head>
       <body>
         <h1>🧾 Bilingual Question Paper</h1>
-        <h2>دو لسانی سوالنامہ (Puppeteer-core in Next.js)</h2>
+        <h2>دو لسانی سوالنامہ (Generated via Puppeteer-core + Next.js)</h2>
         <div class="meta">
           <b>Subject:</b> Next.js Serverless Automation<br/>
           <b>Time:</b> 2 hours &nbsp; | &nbsp; <b>Total Marks:</b> 50
         </div>
 
-        <!-- Q1 -->
         <div class="section">
+          <h3>Section A – Short Questions</h3>
           <div class="dual">
-            <div class="english">
-              <b>Q1:</b> Explain why Puppeteer-core is preferred over Puppeteer when deploying on Vercel.
-            </div>
-            <div class="urdu">
-              <b>س1:</b> وضاحت کریں کہ Vercel پر تعیناتی کے وقت Puppeteer کی بجائے Puppeteer-core کیوں استعمال کیا جاتا ہے؟
-            </div>
+            <div class="english">1. Define serverless computing in simple words.</div>
+            <div class="urdu">1. سرور لیس کمپیوٹنگ کی سادہ تعریف بیان کریں۔</div>
+          </div>
+          <div class="dual">
+            <div class="english">2. What is the purpose of Puppeteer in a Next.js project?</div>
+            <div class="urdu">2. نیٹ جے ایس پروجیکٹ میں پپیٹیئر کا کیا مقصد ہے؟</div>
+          </div>
+          <div class="dual">
+            <div class="english">3. Name any two PDF generation methods for web apps.</div>
+            <div class="urdu">3. ویب ایپس میں پی ڈی ایف بنانے کے دو طریقے لکھیں۔</div>
           </div>
         </div>
 
-        <!-- Q2 -->
-        <div class="section">
+        <div class="section page-break">
+          <h3>Section B – Long Questions</h3>
           <div class="dual">
             <div class="english">
-              <b>Q2:</b> What is the purpose of <code>@sparticuz/chromium</code> in serverless environments?
+              4. Explain how Puppeteer-core works with @sparticuz/chromium on Vercel.
             </div>
             <div class="urdu">
-              <b>س2:</b> Serverless ماحول میں <code>@sparticuz/chromium</code> کا کیا کردار ہے؟
+              4. وضاحت کریں کہ پپیٹیئر کور @sparticuz/chromium کے ساتھ Vercel پر کیسے کام کرتا ہے۔
             </div>
           </div>
-        </div>
-
-        <!-- Q3 -->
-        <div class="section">
           <div class="dual">
             <div class="english">
-              <b>Q3:</b> Describe how Puppeteer-core runs Chrome locally versus on Vercel.
+              5. Discuss advantages of using Puppeteer over other PDF libraries.
             </div>
             <div class="urdu">
-              <b>س3:</b> وضاحت کریں کہ Puppeteer-core لوکل مشین پر اور Vercel پر Chrome کو کس طرح چلاتا ہے؟
-            </div>
-          </div>
-        </div>
-
-        <!-- Q4 -->
-        <div class="section">
-          <div class="dual">
-            <div class="english">
-              <b>Q4:</b> What are the main differences between Puppeteer and Puppeteer-core packages?
-            </div>
-            <div class="urdu">
-              <b>س4:</b> Puppeteer اور Puppeteer-core پیکجز کے درمیان بنیادی فرق کیا ہے؟
-            </div>
-          </div>
-        </div>
-
-        <!-- Q5 -->
-        <div class="section">
-          <div class="dual">
-            <div class="english">
-              <b>Q5:</b> Explain the role of “executablePath” in Puppeteer-core configuration.
-            </div>
-            <div class="urdu">
-              <b>س5:</b> Puppeteer-core کی ترتیب میں “executablePath” کا کیا کردار ہے؟
-            </div>
-          </div>
-        </div>
-
-        <div class="page-break"></div>
-
-        <!-- Q6 -->
-        <div class="section">
-          <div class="dual">
-            <div class="english">
-              <b>Q6:</b> Why can’t Puppeteer run directly on Vercel without a custom Chromium binary?
-            </div>
-            <div class="urdu">
-              <b>س6:</b> Puppeteer کو Vercel پر custom Chromium کے بغیر براہ راست کیوں نہیں چلایا جا سکتا؟
-            </div>
-          </div>
-        </div>
-
-        <!-- Q7 -->
-        <div class="section">
-          <div class="dual">
-            <div class="english">
-              <b>Q7:</b> What are common issues faced when generating PDFs with Puppeteer-core on Vercel?
-            </div>
-            <div class="urdu">
-              <b>س7:</b> Puppeteer-core کے ذریعے Vercel پر PDF بناتے وقت عام مسائل کون سے ہیں؟
-            </div>
-          </div>
-        </div>
-
-        <!-- Q8 -->
-        <div class="section">
-          <div class="dual">
-            <div class="english">
-              <b>Q8:</b> Write a short note on the importance of headless browsers in serverless automation.
-            </div>
-            <div class="urdu">
-              <b>س8:</b> Serverless automation میں headless browsers کی اہمیت پر مختصر نوٹ لکھیں۔
-            </div>
-          </div>
-        </div>
-
-        <!-- Q9 -->
-        <div class="section">
-          <div class="dual">
-            <div class="english">
-              <b>Q9:</b> Explain how Puppeteer-core integrates with Next.js API routes for PDF generation.
-            </div>
-            <div class="urdu">
-              <b>س9:</b> وضاحت کریں کہ Puppeteer-core Next.js API routes کے ساتھ PDF بنانے کے لیے کس طرح منسلک ہوتا ہے؟
-            </div>
-          </div>
-        </div>
-
-        <!-- Q10 -->
-        <div class="section">
-          <div class="dual">
-            <div class="english">
-              <b>Q10:</b> Discuss future alternatives to Puppeteer for serverless environments.
-            </div>
-            <div class="urdu">
-              <b>س10:</b> Serverless ماحول کے لیے Puppeteer کے متبادل مستقبل کے اختیارات پر تبادلہ خیال کریں۔
+              5. دیگر پی ڈی ایف لائبریریوں کے مقابلے میں پپیٹیئر کے فوائد پر بحث کریں۔
             </div>
           </div>
         </div>
 
         <h3 style="text-align:center; margin-top:40px;">--- End of Paper ---</h3>
+        <div class="footer">
+          © ${new Date().getFullYear()} Examly Automation System — Powered by Next.js
+        </div>
       </body>
       </html>
     `;
@@ -214,15 +152,14 @@ export default async function handler(req, res) {
 
     await browser.close();
 
-    // ✅ Fixed PDF streaming (no “Failed to load”)
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
       "attachment; filename=bilingual-question-paper.pdf"
     );
     res.send(Buffer.from(pdfBuffer));
-  } catch (error) {
-    console.error("PDF generation failed:", error);
-    res.status(500).json({ error: error.message });
+  } catch (error: any) {
+    console.error("❌ PDF generation failed:", error);
+    res.status(500).json({ error: error.message || "PDF generation error" });
   }
 }
