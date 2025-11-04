@@ -14,13 +14,13 @@ export default async function handler(
       ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // adjust if needed
       : await chromium.executablePath();
 
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath,
-      // ✅ Chromium v133+ removed `chromium.headless`, so just set this manually:
-      headless: true,
-      defaultViewport: chromium.defaultViewport,
-    });
+ const browser = await puppeteer.launch({
+  args: chromium.args,
+  executablePath,
+  headless: true, // ✅ always true for serverless (Vercel)
+  defaultViewport: chromium.defaultViewport,
+});
+
 
     const page = await browser.newPage();
 
