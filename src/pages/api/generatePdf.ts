@@ -4,10 +4,10 @@ import chromium from "@sparticuz/chromium";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    // Detect local vs Vercel environment
+    // Detect if running locally or on Vercel
     const isLocal = !process.env.AWS_REGION;
 
-    // Detect local Chrome path dynamically for Windows, macOS, Linux
+    // Local Chrome path detection
     const localChromePath =
       process.platform === "win32"
         ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const browser = await puppeteer.launch({
       args: chromium.args,
       executablePath,
-      headless: chromium.headless,
+      headless: true, // ✅ fixed: use plain headless mode
       defaultViewport: chromium.defaultViewport,
     });
 
@@ -35,108 +35,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         <title>دو لسانی سوالنامہ / Bilingual Question Paper</title>
         <style>
           body {
-            font-family: 'Noto Naskh Arabic', 'Arial', sans-serif;
+            font-family: 'Noto Naskh Arabic', Arial, sans-serif;
             padding: 40px;
-            line-height: 1.8;
             background: #fdfdfd;
+            line-height: 1.8;
           }
-          h1, h2, h3 {
-            text-align: center;
-            margin-bottom: 10px;
-          }
-          h1 {
-            font-size: 24px;
-            color: #222;
-          }
-          h2 {
-            font-size: 20px;
-            color: #444;
-          }
-          .meta {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 14px;
-            color: #555;
-          }
-          .section {
-            margin-bottom: 35px;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 10px;
-          }
-          .urdu {
-            direction: rtl;
-            text-align: right;
-            font-size: 1.1rem;
-            margin-top: 5px;
-          }
-          .english {
-            direction: ltr;
-            text-align: left;
-            font-size: 1.1rem;
-          }
-          .dual {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-          }
-          .page-break {
-            page-break-after: always;
-          }
-          .footer {
-            text-align: center;
-            font-size: 12px;
-            color: #777;
-            margin-top: 40px;
-          }
+          h1, h2, h3 { text-align: center; margin-bottom: 10px; }
+          .section { margin-bottom: 35px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+          .dual { display: flex; justify-content: space-between; gap: 20px; }
+          .urdu { direction: rtl; text-align: right; font-size: 1.1rem; }
+          .english { direction: ltr; text-align: left; font-size: 1.1rem; }
+          .page-break { page-break-after: always; }
+          .footer { text-align: center; font-size: 12px; color: #777; margin-top: 40px; }
         </style>
       </head>
       <body>
         <h1>🧾 Bilingual Question Paper</h1>
         <h2>دو لسانی سوالنامہ (Generated via Puppeteer-core + Next.js)</h2>
-        <div class="meta">
-          <b>Subject:</b> Next.js Serverless Automation<br/>
-          <b>Time:</b> 2 hours &nbsp; | &nbsp; <b>Total Marks:</b> 50
-        </div>
-
         <div class="section">
-          <h3>Section A – Short Questions</h3>
           <div class="dual">
-            <div class="english">1. Define serverless computing in simple words.</div>
-            <div class="urdu">1. سرور لیس کمپیوٹنگ کی سادہ تعریف بیان کریں۔</div>
+            <div class="english">1. Define serverless computing.</div>
+            <div class="urdu">1. سرور لیس کمپیوٹنگ کی تعریف کریں۔</div>
           </div>
           <div class="dual">
-            <div class="english">2. What is the purpose of Puppeteer in a Next.js project?</div>
-            <div class="urdu">2. نیٹ جے ایس پروجیکٹ میں پپیٹیئر کا کیا مقصد ہے؟</div>
-          </div>
-          <div class="dual">
-            <div class="english">3. Name any two PDF generation methods for web apps.</div>
-            <div class="urdu">3. ویب ایپس میں پی ڈی ایف بنانے کے دو طریقے لکھیں۔</div>
+            <div class="english">2. What is Puppeteer?</div>
+            <div class="urdu">2. پپیٹیئر کیا ہے؟</div>
           </div>
         </div>
-
-        <div class="section page-break">
-          <h3>Section B – Long Questions</h3>
-          <div class="dual">
-            <div class="english">
-              4. Explain how Puppeteer-core works with @sparticuz/chromium on Vercel.
-            </div>
-            <div class="urdu">
-              4. وضاحت کریں کہ پپیٹیئر کور @sparticuz/chromium کے ساتھ Vercel پر کیسے کام کرتا ہے۔
-            </div>
-          </div>
-          <div class="dual">
-            <div class="english">
-              5. Discuss advantages of using Puppeteer over other PDF libraries.
-            </div>
-            <div class="urdu">
-              5. دیگر پی ڈی ایف لائبریریوں کے مقابلے میں پپیٹیئر کے فوائد پر بحث کریں۔
-            </div>
-          </div>
-        </div>
-
-        <h3 style="text-align:center; margin-top:40px;">--- End of Paper ---</h3>
         <div class="footer">
-          © ${new Date().getFullYear()} Examly Automation System — Powered by Next.js
+          © ${new Date().getFullYear()} Examly Automation System
         </div>
       </body>
       </html>
