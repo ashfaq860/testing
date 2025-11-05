@@ -15,7 +15,12 @@ export default function Home() {
       link.download = "bilingual-question-paper.pdf";
       link.click();
     } catch (error) {
-      alert("Error generating PDF: " + error.message);
+      // ✅ Fix TypeScript “error is unknown”
+      if (error instanceof Error) {
+        alert("Error generating PDF: " + error.message);
+      } else {
+        alert("Error generating PDF: " + String(error));
+      }
     } finally {
       setLoading(false);
     }
