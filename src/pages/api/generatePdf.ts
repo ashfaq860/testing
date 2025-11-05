@@ -20,48 +20,47 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const page = await browser.newPage();
 
-    // ✅ Urdu-compatible Google font (Noto Nastaliq Urdu or Noto Naskh Arabic)
+    // ✅ Use a font that supports Urdu text (Google Font)
     const html = `
       <html lang="ur">
         <head>
           <meta charset="utf-8" />
-          <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
           <style>
             body {
-              font-family: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', Arial, sans-serif;
+              font-family: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', 'Roboto', Arial, sans-serif;
               padding: 40px;
               line-height: 1.8;
               direction: rtl;
               unicode-bidi: bidi-override;
+              background: #fff;
+              color: #111;
             }
-            h1, h3 {
+            h1, h2, h3 {
               text-align: center;
               color: #0070f3;
               direction: rtl;
             }
-            h1 { font-size: 22px; }
-            h3 { font-size: 18px; margin-bottom: 30px; }
-            hr { margin: 20px 0; }
-            p {
-              margin-bottom: 16px;
+            h1 { font-size: 26px; margin-bottom: 8px; }
+            h2 { font-size: 22px; margin-top: 40px; margin-bottom: 10px; border-bottom: 2px solid #0070f3; display: inline-block; padding-bottom: 4px; }
+            h3 { font-size: 18px; margin-bottom: 16px; }
+            p, li {
               font-size: 16px;
-              direction: rtl;
-              text-align: right;
+              margin-bottom: 10px;
             }
-            b {
-              color: #333;
+            ol, ul {
+              padding-right: 20px;
             }
-            code {
-              background: #f4f4f4;
-              padding: 2px 4px;
-              border-radius: 4px;
-              font-family: monospace;
+            .eng {
+              direction: ltr;
+              text-align: left;
+              font-family: 'Roboto', Arial, sans-serif;
             }
             footer {
               text-align: center;
               font-size: 14px;
               color: #777;
-              margin-top: 30px;
+              margin-top: 40px;
               border-top: 1px solid #ccc;
               padding-top: 10px;
               direction: ltr;
@@ -69,40 +68,55 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           </style>
         </head>
         <body>
-          <h1>🧾 دو لسانی سوالنامہ — Puppeteer-core (لوکل اور Vercel)</h1>
-          <h3>Bilingual Question Paper — Puppeteer-core (Local + Vercel)</h3>
+          <h1>📘 دو لسانی سوالنامہ</h1>
+          <h3>Bilingual Question Paper (Urdu + English)</h3>
 
-          <hr />
+          <p style="text-align:center;"><b>Subject:</b> Computer Science<br/><b>Total Marks:</b> 100<br/><b>Time:</b> 3 Hours</p>
+          <hr/>
 
-          <p>
-            <b>سوال 1:</b> وضاحت کریں کہ Vercel پر تعیناتی کے دوران 
-            <code>puppeteer</code> کی بجائے <code>puppeteer-core</code> کیوں استعمال کیا جاتا ہے۔<br/>
-            <b>Q1:</b> Explain why <code>puppeteer-core</code> is preferred over <code>puppeteer</code> when deploying on Vercel.
-          </p>
+          <!-- ===================== MCQs Section ===================== -->
+          <h2>حصہ اول: کثیر الانتخاب سوالات (MCQs)</h2>
+          <h3 class="eng">Section A: Multiple Choice Questions (12 Marks)</h3>
 
-          <p>
-            <b>سوال 2:</b> Serverless ماحول میں <code>@sparticuz/chromium</code> کا کیا کردار ہے؟<br/>
-            <b>Q2:</b> What is the role of <code>@sparticuz/chromium</code> in serverless environments?
-          </p>
+          <ol>
+            ${Array.from({ length: 12 }, (_, i) => `
+              <li>
+                <b>Q${i + 1}:</b> کمپیوٹر کی بنیادی اکائی کیا ہے؟<br/>
+                <span class="eng"><b>Q${i + 1}:</b> What is the basic unit of a computer?</span><br/>
+                (a) Bit  (b) Byte  (c) Kilobyte  (d) Megabyte
+              </li>
+            `).join('')}
+          </ol>
 
-          <p>
-            <b>سوال 3:</b> وضاحت کریں کہ <code>puppeteer-core</code> Next.js میں لوکل اور Vercel پر کس طرح مختلف طریقے سے کام کرتا ہے۔<br/>
-            <b>Q3:</b> Describe how <code>puppeteer-core</code> works locally vs on Vercel in Next.js.
-          </p>
+          <!-- ===================== Short Questions ===================== -->
+          <h2>حصہ دوم: مختصر سوالات (Short Questions)</h2>
+          <h3 class="eng">Section B: Short Questions (24 Marks)</h3>
 
-          <p>
-            <b>سوال 4:</b> Serverless تعیناتی میں headless Chromium استعمال کرنے کی بنیادی مشکلات کیا ہیں؟<br/>
-            <b>Q4:</b> What are the main challenges of using headless Chromium in a serverless deployment?
-          </p>
+          <ol start="13">
+            ${Array.from({ length: 24 }, (_, i) => `
+              <li>
+                <b>سوال ${i + 1}:</b> کمپیوٹر نیٹ ورک کیا ہے؟<br/>
+                <span class="eng"><b>Q${i + 1}:</b> What is a computer network?</span>
+              </li>
+            `).join('')}
+          </ol>
 
-          <p>
-            <b>سوال 5:</b> وضاحت کریں کہ آپ Puppeteer-core کا استعمال کرتے ہوئے ایک ہی PDF میں مختلف زبانوں کا مواد کیسے تیار کریں گے۔<br/>
-            <b>Q5:</b> Explain how you would generate multi-language content in a single PDF using Puppeteer-core.
-          </p>
+          <!-- ===================== Long Questions ===================== -->
+          <h2>حصہ سوم: طویل سوالات (Long Questions)</h2>
+          <h3 class="eng">Section C: Long Questions (25 Marks)</h3>
+
+          <ol start="37">
+            ${Array.from({ length: 5 }, (_, i) => `
+              <li>
+                <b>سوال ${i + 1}:</b> کمپیوٹر کے مختلف اجزاء کی وضاحت کریں۔<br/>
+                <span class="eng"><b>Q${i + 1}:</b> Explain the different components of a computer system.</span>
+              </li>
+            `).join('')}
+          </ol>
 
           <footer>
-            Generated automatically by Puppeteer-core and @sparticuz/chromium<br/>
-            (Works locally and on Vercel)
+            Generated automatically by Puppeteer-core & @sparticuz/chromium<br/>
+            (Fully Bilingual | Works on Local + Vercel)
           </footer>
         </body>
       </html>
