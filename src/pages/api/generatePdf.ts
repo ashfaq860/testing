@@ -13,14 +13,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const browser = await puppeteer.launch({
       args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
       executablePath,
-      headless: isLocal ? true : chromium.headless,
+      headless: true, // ✅ always true for both local + Vercel
+      defaultViewport: { width: 1280, height: 800 }, // ✅ manually define viewport
     });
 
     const page = await browser.newPage();
 
-    // Full bilingual question paper HTML
     const html = `
       <html>
         <head>
@@ -121,8 +120,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       "Content-Disposition",
       "attachment; filename=bilingual-question-paper.pdf"
     );
-    res.status(200);
-    res.end(pdfBuffer);
+    res.status(200).end(pdfBuffer);
   } catch (err: any) {
     console.error("PDF generation failed:", err);
     res
