@@ -14,37 +14,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const browser = await puppeteer.launch({
       args: chromium.args,
       executablePath,
-      headless: true, // ✅ always true for both local + Vercel
-      defaultViewport: { width: 1280, height: 800 }, // ✅ manually define viewport
+      headless: true,
+      defaultViewport: { width: 1280, height: 800 },
     });
 
     const page = await browser.newPage();
 
+    // ✅ Urdu-compatible Google font (Noto Nastaliq Urdu or Noto Naskh Arabic)
     const html = `
-      <html>
+      <html lang="ur">
         <head>
           <meta charset="utf-8" />
+          <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
           <style>
             body {
-              font-family: Arial, sans-serif;
+              font-family: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', Arial, sans-serif;
               padding: 40px;
               line-height: 1.8;
-            }
-            h1 {
-              text-align: center;
-              color: #0070f3;
-            }
-            h3 {
-              text-align: center;
               direction: rtl;
+              unicode-bidi: bidi-override;
+            }
+            h1, h3 {
+              text-align: center;
               color: #0070f3;
+              direction: rtl;
             }
-            hr {
-              margin: 20px 0;
-            }
+            h1 { font-size: 22px; }
+            h3 { font-size: 18px; margin-bottom: 30px; }
+            hr { margin: 20px 0; }
             p {
               margin-bottom: 16px;
               font-size: 16px;
+              direction: rtl;
+              text-align: right;
             }
             b {
               color: #333;
@@ -62,38 +64,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               margin-top: 30px;
               border-top: 1px solid #ccc;
               padding-top: 10px;
+              direction: ltr;
             }
           </style>
         </head>
         <body>
-          <h1>🧾 Bilingual Question Paper — Puppeteer-core (Local + Vercel)</h1>
-          <h3>دو لسانی سوالنامہ — Puppeteer-core (لوکل اور ورسل)</h3>
+          <h1>🧾 دو لسانی سوالنامہ — Puppeteer-core (لوکل اور Vercel)</h1>
+          <h3>Bilingual Question Paper — Puppeteer-core (Local + Vercel)</h3>
 
           <hr />
 
           <p>
-            <b>Q1:</b> Explain why <code>puppeteer-core</code> is preferred over <code>puppeteer</code> when deploying on Vercel.<br/>
-            <b>س1:</b> وضاحت کریں کہ Vercel پر تعیناتی کے دوران <code>puppeteer</code> کی بجائے <code>puppeteer-core</code> کیوں استعمال کیا جاتا ہے۔
+            <b>سوال 1:</b> وضاحت کریں کہ Vercel پر تعیناتی کے دوران 
+            <code>puppeteer</code> کی بجائے <code>puppeteer-core</code> کیوں استعمال کیا جاتا ہے۔<br/>
+            <b>Q1:</b> Explain why <code>puppeteer-core</code> is preferred over <code>puppeteer</code> when deploying on Vercel.
           </p>
 
           <p>
-            <b>Q2:</b> What is the role of <code>@sparticuz/chromium</code> in serverless environments?<br/>
-            <b>س2:</b> Serverless ماحول میں <code>@sparticuz/chromium</code> کا کیا کردار ہے؟
+            <b>سوال 2:</b> Serverless ماحول میں <code>@sparticuz/chromium</code> کا کیا کردار ہے؟<br/>
+            <b>Q2:</b> What is the role of <code>@sparticuz/chromium</code> in serverless environments?
           </p>
 
           <p>
-            <b>Q3:</b> Describe how <code>puppeteer-core</code> works locally vs on Vercel in Next.js.<br/>
-            <b>س3:</b> وضاحت کریں کہ <code>puppeteer-core</code> Next.js میں لوکل اور Vercel پر کس طرح مختلف طریقے سے کام کرتا ہے۔
+            <b>سوال 3:</b> وضاحت کریں کہ <code>puppeteer-core</code> Next.js میں لوکل اور Vercel پر کس طرح مختلف طریقے سے کام کرتا ہے۔<br/>
+            <b>Q3:</b> Describe how <code>puppeteer-core</code> works locally vs on Vercel in Next.js.
           </p>
 
           <p>
-            <b>Q4:</b> What are the main challenges of using headless Chromium in a serverless deployment?<br/>
-            <b>س4:</b> Serverless تعیناتی میں headless Chromium استعمال کرنے کی بنیادی مشکلات کیا ہیں؟
+            <b>سوال 4:</b> Serverless تعیناتی میں headless Chromium استعمال کرنے کی بنیادی مشکلات کیا ہیں؟<br/>
+            <b>Q4:</b> What are the main challenges of using headless Chromium in a serverless deployment?
           </p>
 
           <p>
-            <b>Q5:</b> Explain how you would generate multi-language content in a single PDF using Puppeteer-core.<br/>
-            <b>س5:</b> وضاحت کریں کہ آپ Puppeteer-core کا استعمال کرتے ہوئے ایک ہی PDF میں مختلف زبانوں کا مواد کیسے تیار کریں گے۔
+            <b>سوال 5:</b> وضاحت کریں کہ آپ Puppeteer-core کا استعمال کرتے ہوئے ایک ہی PDF میں مختلف زبانوں کا مواد کیسے تیار کریں گے۔<br/>
+            <b>Q5:</b> Explain how you would generate multi-language content in a single PDF using Puppeteer-core.
           </p>
 
           <footer>
@@ -114,7 +118,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await browser.close();
 
-    // ✅ Proper PDF response headers
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
